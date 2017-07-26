@@ -1,0 +1,17 @@
+/*显示\隐藏密码图片*/
+#visible_img{
+    width: 40px;
+    height: 25px;
+    margin: 25px 0px;
+}
+
+.input-group {
+    display: inline;
+}
+
+.input-group input {
+    position: relative;
+    width: 80%;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}

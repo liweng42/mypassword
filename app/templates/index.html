@@ -1,0 +1,86 @@
+{% extends "base.html" %} 
+{% import "bootstrap/wtf.html" as wtf %} 
+{% block title %}首页{% endblock %} 
+{% block page_content %}
+<div class="container">
+    {% if password_result %}
+    <div class="row">
+        <div id="example-target" class="alert alert-info">
+            <div class="input-group">
+                <label class="control-label" for="password_result">密码为：</label>
+                <input id="password_result" type="text" value="{{ password_result }}">
+                <span class="input-group-button">
+                <button id="copy_btn" class="btn" type="button" data-clipboard-demo="" data-clipboard-target="#password_result">
+                <img class="clippy" src="../static/clippy.svg" width="13" alt="Copy to clipboard">
+                </button>
+                </span>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">生成密码</h3>
+                </div>
+                <div class="panel-body">
+                    <form accept-charset="UTF-8" role="form" method="POST">
+                        {{ form.hidden_tag() }}
+                        <fieldset>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xs-9 col-md-9">
+                                        {{ wtf.form_field(form.secret_key, placeholder="请输入私密秘钥") }}
+                                    </div>
+                                    <div class="col-xs-3 col-md-3">
+                                        <img id="visible_img" onclick="hideShowPsw()" src="../static/invisible.png">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                <div class="col-md-12">
+                                    {{ wtf.form_field(form.app_name, placeholder="请输入应用名称") }}
+                                </div>
+                                </div>
+                            </div>
+                            <input class="btn btn-lg btn-primary btn-block" type="submit" value="生成">
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} {% block js %}
+<script type="text/javascript">
+    // 这里使用最原始的js语法实现，可对应换成jquery语法进行逻辑控制
+    var visible_img = document.getElementById("visible_img");
+    var secret_key = document.getElementById("secret_key");
+    //隐藏text block，显示password block
+    function hideShowPsw() {
+        if (secret_key.type == "password") {
+            secret_key.type = "text";
+            visible_img.src = "../static/visible.png";
+        } else {
+            secret_key.type = "password";
+            visible_img.src = "../static/invisible.png";
+        }
+    }
+
+    var clipboard = new Clipboard('#copy_btn');
+
+    clipboard.on('success', function(e) {
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+
+        e.clearSelection();
+    });
+
+    clipboard.on('error', function(e) {
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+    });
+</script>
+{% endblock %}
